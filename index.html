@@ -209,7 +209,7 @@ const BRIEFING_DATE = "Saturday, May 24, 2026";
 document.getElementById("dateDisplay").textContent = BRIEFING_DATE;
 
 // ── VOICE ─────────────────────────────────────────────────────────────────
-const VOICE_ID = "jD4PjnscE4XmlzgsuqY0"; // Logan
+const VOICE_ID = "pNInz6obpgDQGcFmaJgB"; // Adam (free)
 
 // ── SCRIPT ───────────────────────────────────────────────────────────────
 const SEGMENTS = [
@@ -276,7 +276,7 @@ Stay informed, stay patient, and enjoy the long weekend. This has been your Morn
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
-let apiKey = localStorage.getItem("el_api_key") || "";
+let apiKey = "sk_1b2fdf0c8ff9fa2a44dbb37e3324df2343a971c22fd609e2";
 let audioQueue = [];
 let currentAudio = null;
 let currentSegIdx = 0;
@@ -288,6 +288,8 @@ const TARGET_S = 15 * 60;
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 window.onload = () => {
+  document.getElementById("apiCard").style.display = "none";
+  document.getElementById("readyControls").style.display = "block";
   renderSegments();
   if (apiKey) {
     document.getElementById("apiCard").style.display = "none";
@@ -359,7 +361,7 @@ async function fetchAudio(text) {
     },
     body: JSON.stringify({
       text: text,
-      model_id: "eleven_turbo_v2",
+      model_id: "eleven_monolingual_v1",
       voice_settings: { stability: 0.52, similarity_boost: 0.90, style: 0.12, use_speaker_boost: true }
     })
   });
