@@ -1,1 +1,504 @@
 # morning-briefing
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Morning Briefing">
+<title>Morning Briefing</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    background: #0a0a0f;
+    font-family: Georgia, serif;
+    color: #e8e0d0;
+    overflow-x: hidden;
+  }
+  .bg {
+    position: fixed; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(249,115,22,.09) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(59,130,246,.07) 0%, transparent 60%);
+  }
+  .wrap { position: relative; max-width: 640px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  .badge {
+    display: inline-block;
+    background: linear-gradient(135deg,#f97316,#fb923c);
+    border-radius: 4px; padding: 4px 12px;
+    font-size: 11px; font-family: monospace; letter-spacing: 3px;
+    color: #fff; font-weight: 700;
+  }
+  h1 {
+    font-size: clamp(24px, 6vw, 40px); font-weight: 400;
+    background: linear-gradient(135deg, #f5f0e8 30%, #a89880);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* API key input */
+  .api-card {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px; padding: 20px; margin-bottom: 20px;
+  }
+  .api-card label { display: block; font-family: monospace; font-size: 11px; color: #f97316; letter-spacing: 2px; margin-bottom: 10px; }
+  .api-card input {
+    width: 100%; background: rgba(0,0,0,.4);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+    padding: 10px 14px; color: #c4b8a8; font-size: 13px;
+    font-family: monospace; outline: none;
+  }
+  .api-card input:focus { border-color: rgba(249,115,22,.4); }
+  .save-key-btn {
+    margin-top: 10px; background: rgba(249,115,22,.15);
+    border: 1px solid rgba(249,115,22,.3); border-radius: 8px;
+    padding: 8px 18px; color: #f97316; font-size: 13px;
+    font-family: monospace; cursor: pointer; width: 100%;
+  }
+
+  /* Segment list */
+  .seg-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .seg-btn {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 12px; padding: 14px 16px;
+    cursor: default; text-align: left; width: 100%;
+    transition: all .25s;
+  }
+  .seg-btn.active { background: rgba(255,255,255,.07); }
+  .seg-icon { font-size: 22px; flex-shrink: 0; }
+  .seg-label { font-size: 14px; font-weight: 600; font-family: monospace; color: #c4b8a8; }
+  .seg-label.active { color: var(--seg-color); }
+  .seg-label.done { color: #4a4035; }
+  .seg-check { color: #10b981; font-size: 18px; }
+  .seg-playing { color: var(--seg-color); font-size: 11px; font-family: monospace; }
+
+  /* Waveform */
+  .wave { display: flex; gap: 3px; margin-top: 5px; align-items: flex-end; }
+  .wave-bar {
+    width: 3px; height: 14px; border-radius: 2px; opacity: .8;
+    background: var(--seg-color);
+    animation: wave .8s ease-in-out infinite alternate;
+  }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 24px; }
+  .progress-track { height: 5px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg,#f97316,#fb923c); border-radius: 3px; transition: width 1s linear; }
+  .progress-times { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; font-family: monospace; color: #4a4035; }
+
+  /* Controls */
+  .controls { display: flex; gap: 14px; justify-content: center; margin-bottom: 20px; }
+  .btn-play {
+    background: linear-gradient(135deg,#f97316,#ea580c);
+    color: #fff; border: none; border-radius: 50%;
+    width: 88px; height: 88px; font-size: 32px;
+    cursor: pointer; box-shadow: 0 0 50px rgba(249,115,22,.5);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-pause {
+    background: rgba(249,115,22,.15); color: #f97316;
+    border: 1px solid rgba(249,115,22,.3); border-radius: 50%;
+    width: 64px; height: 64px; font-size: 24px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-stop {
+    background: rgba(255,255,255,.05); color: #6b6355;
+    border: 1px solid rgba(255,255,255,.08); border-radius: 50%;
+    width: 64px; height: 64px; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-spotify {
+    width: 100%; background: linear-gradient(135deg,#1db954,#1aa34a);
+    color: #fff; border: none; border-radius: 14px; padding: 18px;
+    font-size: 17px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 0 30px rgba(29,185,84,.3); margin-bottom: 12px; letter-spacing: .3px;
+  }
+  .btn-replay {
+    background: rgba(249,115,22,.1); color: #f97316;
+    border: 1px solid rgba(249,115,22,.2); border-radius: 10px;
+    padding: 12px 28px; font-size: 15px; cursor: pointer;
+  }
+
+  /* Status */
+  .status-bar {
+    background: rgba(249,115,22,.07); border: 1px solid rgba(249,115,22,.15);
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+    font-family: monospace; font-size: 13px; color: #fb923c; text-align: center;
+  }
+  .status-bar.error { background: rgba(239,68,68,.07); border-color: rgba(239,68,68,.2); color: #ef4444; }
+
+  @keyframes wave {
+    from { transform: scaleY(.4); }
+    to   { transform: scaleY(1.3); }
+  }
+
+  /* Loading spinner */
+  .spinner {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 3px solid rgba(249,115,22,.2);
+    border-top-color: #f97316;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .center { text-align: center; }
+  .mono { font-family: monospace; }
+  .muted { color: #6b6355; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="center" style="margin-bottom:32px">
+    <div class="badge" style="margin-bottom:12px">MORNING BRIEFING</div>
+    <h1 style="margin-bottom:6px">Your Daily Intelligence Podcast</h1>
+    <p class="mono muted" id="dateDisplay" style="font-size:13px"></p>
+  </div>
+
+  <!-- API Key input (hidden once saved) -->
+  <div class="api-card" id="apiCard">
+    <label>ELEVENLABS API KEY</label>
+    <input type="password" id="apiKeyInput" placeholder="Paste your API key here..." autocomplete="off">
+    <button class="save-key-btn" onclick="saveKey()">Save Key & Start</button>
+    <p class="mono muted" style="font-size:11px;margin-top:8px;text-align:center">Stored locally on your device only</p>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar" id="statusBar" style="display:none"></div>
+
+  <!-- Segment list -->
+  <div class="seg-list" id="segList"></div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap" style="display:none">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-times"><span id="timeElapsed">0:00</span><span>15:00</span></div>
+  </div>
+
+  <!-- Controls -->
+  <div id="readyControls" class="center" style="display:none;margin-bottom:20px">
+    <button class="btn-play" onclick="startBriefing()">▶</button>
+    <p class="mono muted" style="font-size:13px;margin-top:12px">Tap to begin · ~15 minutes</p>
+  </div>
+
+  <div class="controls" id="playingControls" style="display:none">
+    <button class="btn-pause" id="pauseBtn" onclick="togglePause()">⏸</button>
+    <button class="btn-stop" onclick="stopBriefing()">⏹</button>
+  </div>
+
+  <!-- Done state -->
+  <div id="doneControls" class="center" style="display:none">
+    <p class="mono" style="color:#10b981;margin-bottom:18px;font-size:14px">✓ Briefing Complete</p>
+    <button class="btn-spotify" onclick="openSpotify()">🎵 Open Spotify</button><br>
+    <button class="btn-replay" onclick="startBriefing()">↺ Play Again</button>
+  </div>
+
+</div>
+
+<script>
+// ── BRIEFING DATE ─────────────────────────────────────────────────────────
+const BRIEFING_DATE = "Saturday, May 24, 2026";
+document.getElementById("dateDisplay").textContent = BRIEFING_DATE;
+
+// ── VOICE ─────────────────────────────────────────────────────────────────
+const VOICE_ID = "jD4PjnscE4XmlzgsuqY0"; // Logan
+
+// ── SCRIPT ───────────────────────────────────────────────────────────────
+const SEGMENTS = [
+  {
+    key: "headlines", label: "Top Headlines", icon: "📰", color: "#f97316",
+    text: `Good morning and welcome to your Saturday briefing for May 24th, 2026. Coming off a strong close to the week, here is everything you need to know heading into the weekend.
+
+The dominant geopolitical story remains the U.S.-Iran peace talks, and there was meaningful progress to report as of Friday evening. A Qatari diplomatic delegation flew into Tehran on Friday in coordination with Washington, working to bridge the remaining gaps between the two sides. Secretary of State Marco Rubio signaled cautious optimism, telling reporters there are good signs a deal is within reach — though he made clear that Iran maintaining control of the Strait of Hormuz would be a non-starter for any agreement. That chokepoint carries roughly a fifth of the world's oil supply, and any ceasefire announcement this weekend would be a major market-moving event when trading reopens Tuesday after the Memorial Day holiday.
+
+Congressional Republicans left the capital for recess without passing President Trump's flagship immigration enforcement legislation. A faction within the party revolted over funding provisions, including what critics characterized as a nearly two-billion-dollar discretionary fund linked to a Trump property. It is a reminder that governing with razor-thin majorities is difficult even when one party controls all levers of power.
+
+President Trump and Secretary Rubio both raised the possibility of military intervention in Cuba on Thursday, a day after the Justice Department announced criminal charges against former Cuban leader Raul Castro. The move sent shockwaves through Latin American diplomatic circles. Whether this is genuine strategic signaling or aggressive pressure tactics remains to be seen, but the rhetoric alone marks a sharp departure from recent U.S. foreign policy norms.
+
+OpenAI's confidential IPO filing with the SEC continued to reverberate through markets. The company is reportedly working with Goldman Sachs and Morgan Stanley on a fall offering. The news triggered a stunning two-day surge in SoftBank — the Japanese conglomerate added more than sixty billion dollars in market capitalization in just forty-eight hours, one of the largest short-term gains in Tokyo Stock Exchange history.
+
+U.S.-China trade talks in Beijing wrapped up with a broadly positive tone, but notable disagreements remained on agriculture concessions, tariff levels, and rare earth mineral access. China's dominance in rare earth processing continues to be a leverage point Beijing is unwilling to surrender, and that friction will shape semiconductor and electric vehicle supply chains for years to come.`
+  },
+  {
+    key: "markets", label: "Markets Overview", icon: "📊", color: "#3b82f6",
+    text: `Let's get into the numbers. Friday delivered one of the more satisfying closes of the year. The Dow Jones Industrial Average gained 294 points to settle at 50,579 — a fresh all-time record close. The S&P 500 rose 0.37 percent to end at 7,473. The Nasdaq Composite added 0.19 percent to finish at 26,343.
+
+The weekly picture is even more impressive. The S&P 500 posted its eighth consecutive winning week — the longest such streak since late 2023. The Dow rose more than two percent on the week. The Nasdaq notched its seventh advance in the past eight weeks. Eight straight weekly gains reflects sustained institutional buying, not short-term momentum chasing.
+
+Two forces drove Friday's session. First, Treasury yields pulled back modestly, giving rate-sensitive sectors room to run. The 10-year yield has been inversely correlated with Iran peace talk headlines throughout this conflict. Second, a cascade of company-specific catalysts in technology and AI infrastructure gave the growth trade fresh fuel.
+
+Sector performance was led by Health Care, up more than one percent, capping its best weekly performance in over six months at roughly 3.4 percent. Technology also rose about a percent. The only laggard was Communications Services, which shed half a percent. Breadth was solid — advancers outpaced decliners by a comfortable margin on both exchanges.
+
+West Texas Intermediate crude settled near 96 dollars per barrel, essentially flat. A confirmed ceasefire could send crude down five to ten dollars in a session. The VIX remained comfortably subdued in the low-to-mid teens — this is a market leaning forward, not crouching in defense.`
+  },
+  {
+    key: "macro", label: "Macro Trends", icon: "🌍", color: "#8b5cf6",
+    text: `Let's examine the larger forces at work, because it is the macroeconomic environment that determines the durability of any rally.
+
+The Federal Reserve is in a studied holding pattern. Inflation reaccelerated in the first quarter of 2026 as energy costs surged due to Strait of Hormuz disruptions, forcing the Fed to walk back its projected rate cut path. Current guidance suggests one cut in the back half of 2026 and potentially one more in 2027 — but both are explicitly contingent on inflation continuing to normalize, which is largely contingent on the Iran conflict being resolved.
+
+The most recent CPI reading showed headline inflation running around 3.4 percent year-over-year, still above the Fed's two percent target. Core PCE is running around 2.8 percent. Energy has been the primary driver of the overshoot. If oil falls meaningfully on a ceasefire deal, disinflation could reassert itself quickly, potentially opening a window for the Fed to move as early as September.
+
+The labor market continues to be the economy's most reliable source of resilience. Nonfarm payrolls have been growing at roughly 140 to 160 thousand jobs per month. The unemployment rate sits at around 4.2 percent, still historically low. Wage growth has moderated enough that it is no longer adding meaningfully to inflationary pressure.
+
+The key events in the week of May 26th: Dell Technologies reports earnings May 28th, HP Inc reports May 27th. Both will be read as proxies for enterprise AI infrastructure spending. Watch oil prices Sunday night when futures open — they will be the canary in the coal mine for how Tuesday's open trades.`
+  },
+  {
+    key: "movers", label: "Biggest Movers", icon: "🚀", color: "#10b981",
+    text: `Now let's talk about the names that made the biggest moves, because the individual stock action was extraordinary this week.
+
+Dell Technologies, ticker DELL, surged nearly sixteen percent on Friday. The catalyst was a flood of analyst upgrades ahead of Dell's fiscal first-quarter earnings due May 28th, triggered by a blockbuster report from Lenovo, which disclosed that its AI-related revenue jumped 84 percent year-over-year. The market immediately treated Lenovo's results as a forward read on Dell's own order book, and Dell's new AI products built in collaboration with Nvidia added further fuel.
+
+HP Inc, ticker HPQ, rode the exact same wave, climbing fourteen percent. The Lenovo halo effect spread across the entire PC and server ecosystem, and HP's own earnings report due May 27th gave traders additional reason to front-run what looks like a strong AI-driven quarter.
+
+Qualcomm, ticker QCOM, jumped twelve percent after Stellantis announced a significant expansion of its multi-year technology partnership with the chipmaker. Qualcomm has been executing a deliberate pivot toward automotive and AI edge computing, and the Stellantis deal is the most concrete external validation of that strategy to date.
+
+Workday, ticker WDAY, climbed seven to eight percent after posting first-quarter results that beat on both revenue and operating margin while raising full-year guidance. Co-founder Aneel Bhusri returned to the CEO role, and management highlighted its AI-powered HR analytics suite as a key driver of new customer wins.
+
+On the downside, Take-Two Interactive fell 6.4 percent as investors grow impatient with the video game publisher's timeline for major title releases. IQVIA Holdings slipped about two percent. Insulet Corporation gave back nearly three percent in routine profit-taking. The week's message: own AI infrastructure and do not fight the earnings revision cycle in enterprise technology.`
+  },
+  {
+    key: "closing", label: "Closing Take", icon: "🎙️", color: "#f59e0b",
+    text: `So what is the single most important idea to carry into this Memorial Day weekend? The market has made a confident bet. Eight straight weekly gains in the S&P 500. Record closes on the Dow. Double-digit single-day moves in Dell, HP, and Qualcomm. All of it reflects a market that has decided the AI capital expenditure cycle is real and durable — and that geopolitical risks will ultimately be resolved through diplomacy rather than escalation.
+
+That bet could be proven right this weekend if Iran talks produce a framework agreement. It could be stress-tested if talks collapse. Either way, watch oil prices when futures markets open Sunday evening. That single data point will tell you almost everything you need to know about how Tuesday's session is set up.
+
+Stay informed, stay patient, and enjoy the long weekend. This has been your Morning Intelligence Briefing for Saturday, May 24th, 2026. Have a great Memorial Day.`
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let apiKey = localStorage.getItem("el_api_key") || "";
+let audioQueue = [];
+let currentAudio = null;
+let currentSegIdx = 0;
+let isPaused = false;
+let progressInterval = null;
+let startTime = null;
+let elapsedOnPause = 0;
+const TARGET_S = 15 * 60;
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+window.onload = () => {
+  renderSegments();
+  if (apiKey) {
+    document.getElementById("apiCard").style.display = "none";
+    document.getElementById("readyControls").style.display = "block";
+    showStatus("Logan voice ready · tap play to begin", false);
+  }
+};
+
+function saveKey() {
+  const val = document.getElementById("apiKeyInput").value.trim();
+  if (!val) return;
+  apiKey = val;
+  localStorage.setItem("el_api_key", val);
+  document.getElementById("apiCard").style.display = "none";
+  document.getElementById("readyControls").style.display = "block";
+  showStatus("API key saved · tap play to begin", false);
+}
+
+// ── SEGMENTS UI ───────────────────────────────────────────────────────────
+function renderSegments() {
+  const list = document.getElementById("segList");
+  list.innerHTML = SEGMENTS.map((s, i) => `
+    <div class="seg-btn" id="seg_${i}" style="--seg-color:${s.color}" onclick="segClick(${i})">
+      <span class="seg-icon">${s.icon}</span>
+      <div style="flex:1">
+        <div class="seg-label" id="seglabel_${i}">${s.label}</div>
+        <div id="segwave_${i}" style="display:none">
+          <div class="wave">
+            ${[0,1,2,3,4].map((j)=>`<div class="wave-bar" style="background:${s.color};animation-delay:${j*.1}s"></div>`).join("")}
+          </div>
+        </div>
+      </div>
+      <span id="segcheck_${i}" style="display:none;color:#10b981;font-size:18px">✓</span>
+      <span id="segplaying_${i}" class="seg-playing" style="display:none;color:${s.color}">PLAYING</span>
+    </div>
+  `).join("");
+}
+
+function setSegActive(idx) {
+  SEGMENTS.forEach((s, i) => {
+    const btn   = document.getElementById(`seg_${i}`);
+    const label = document.getElementById(`seglabel_${i}`);
+    const wave  = document.getElementById(`segwave_${i}`);
+    const check = document.getElementById(`segcheck_${i}`);
+    const play  = document.getElementById(`segplaying_${i}`);
+    btn.classList.toggle("active", i === idx);
+    label.className = "seg-label" + (i === idx ? " active" : i < idx ? " done" : "");
+    wave.style.display  = i === idx ? "block" : "none";
+    check.style.display = i < idx ? "inline" : "none";
+    play.style.display  = i === idx ? "inline" : "none";
+  });
+}
+
+function segClick(idx) {
+  if (currentAudio || isPaused) {
+    stopCurrent();
+    currentSegIdx = idx;
+    playSegment(idx);
+  }
+}
+
+// ── ELEVENLABS TTS ────────────────────────────────────────────────────────
+async function fetchAudio(text) {
+  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`, {
+    method: "POST",
+    headers: {
+      "xi-api-key": apiKey,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      text: text,
+      model_id: "eleven_turbo_v2",
+      voice_settings: { stability: 0.52, similarity_boost: 0.90, style: 0.12, use_speaker_boost: true }
+    })
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`ElevenLabs error ${res.status}: ${err.slice(0,200)}`);
+  }
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
+}
+
+// ── PLAYBACK ──────────────────────────────────────────────────────────────
+async function startBriefing() {
+  if (!apiKey) { showStatus("Please enter your API key first", true); return; }
+  stopCurrent();
+  currentSegIdx = 0;
+  elapsedOnPause = 0;
+  setPhase("loading");
+  showStatus("Generating audio with Logan voice...", false);
+  await playSegment(0);
+}
+
+async function playSegment(idx) {
+  if (idx >= SEGMENTS.length) { setPhase("done"); return; }
+  currentSegIdx = idx;
+  setSegActive(idx);
+
+  try {
+    showStatus(`Generating segment ${idx+1} of ${SEGMENTS.length}...`, false);
+    const url = await fetchAudio(SEGMENTS[idx].text);
+    hideStatus();
+
+    const audio = new Audio(url);
+    currentAudio = audio;
+    isPaused = false;
+
+    setPhase("playing");
+    startProgressTimer();
+
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+      playSegment(idx + 1);
+    };
+    audio.onerror = () => {
+      showStatus(`Audio error on segment ${idx+1}`, true);
+      currentAudio = null;
+      playSegment(idx + 1);
+    };
+    audio.play();
+
+    // Pre-fetch next segment
+    if (idx + 1 < SEGMENTS.length) {
+      setTimeout(async () => {
+        try {
+          audioQueue[idx+1] = await fetchAudio(SEGMENTS[idx+1].text);
+        } catch(e) {}
+      }, 3000);
+    }
+
+  } catch(e) {
+    showStatus(`Error: ${e.message}`, true);
+    setPhase("ready");
+  }
+}
+
+function togglePause() {
+  if (!currentAudio) return;
+  if (isPaused) {
+    currentAudio.play();
+    isPaused = false;
+    document.getElementById("pauseBtn").textContent = "⏸";
+    startProgressTimer();
+  } else {
+    currentAudio.pause();
+    isPaused = true;
+    elapsedOnPause += (Date.now() - startTime) / 1000;
+    clearInterval(progressInterval);
+    document.getElementById("pauseBtn").textContent = "▶";
+  }
+}
+
+function stopCurrent() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  clearInterval(progressInterval);
+  isPaused = false;
+}
+
+function stopBriefing() {
+  stopCurrent();
+  elapsedOnPause = 0;
+  currentSegIdx = 0;
+  setSegActive(-1);
+  setPhase("ready");
+  document.getElementById("progressFill").style.width = "0%";
+  document.getElementById("timeElapsed").textContent = "0:00";
+}
+
+function startProgressTimer() {
+  clearInterval(progressInterval);
+  startTime = Date.now();
+  progressInterval = setInterval(() => {
+    const total = elapsedOnPause + (Date.now() - startTime) / 1000;
+    const pct = Math.min(total / TARGET_S * 100, 99);
+    document.getElementById("progressFill").style.width = pct + "%";
+    const m = Math.floor(total / 60);
+    const s = Math.floor(total % 60);
+    document.getElementById("timeElapsed").textContent = `${m}:${String(s).padStart(2,"0")}`;
+  }, 1000);
+}
+
+// ── PHASES ────────────────────────────────────────────────────────────────
+function setPhase(phase) {
+  document.getElementById("readyControls").style.display   = phase === "ready"   ? "block" : "none";
+  document.getElementById("playingControls").style.display = phase === "playing" ? "flex"  : "none";
+  document.getElementById("doneControls").style.display    = phase === "done"    ? "block" : "none";
+  document.getElementById("progressWrap").style.display    = (phase === "playing" || phase === "done") ? "block" : "none";
+
+  if (phase === "done") {
+    clearInterval(progressInterval);
+    document.getElementById("progressFill").style.width = "100%";
+    document.getElementById("timeElapsed").textContent = "15:00";
+    setSegActive(SEGMENTS.length); // marks all done
+  }
+  if (phase === "loading") {
+    document.getElementById("readyControls").style.display = "none";
+  }
+}
+
+function showStatus(msg, isError) {
+  const el = document.getElementById("statusBar");
+  el.textContent = msg;
+  el.className = "status-bar" + (isError ? " error" : "");
+  el.style.display = "block";
+}
+function hideStatus() { document.getElementById("statusBar").style.display = "none"; }
+
+function openSpotify() { window.location.href = "spotify:"; }
+</script>
+</body>
+</html>
