@@ -75,9 +75,8 @@
 </div>
 <script>
 const BRIEFING_DATE = "Monday, May 25, 2026";
-const API_KEY = "sk_1b2fdf0c8ff9fa2a44dbb37e3324df2343a971c22fd609e2";
-const VOICE_ID = "pNInz6obpgDQGcFmaJgB";
-const MODEL = "eleven_turbo_v2_5";
+const OPENAI_API_KEY = "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";
+const VOICE = "alloy";
 
 document.getElementById("dateDisplay").textContent = BRIEFING_DATE;
 
@@ -88,19 +87,19 @@ const SEGMENTS = [
   },
   {
     key: "realestate", label: "Real Estate", icon: "🏙️", color: "#3b82f6",
-    text: "Let's talk real estate, because the macro setup right now is genuinely interesting for anyone watching the Los Angeles market. The California Association of Realtors is forecasting a statewide median home price of 905 thousand dollars in 2026, a 3.6 percent increase from last year. The 30-year fixed mortgage rate in California sits at 6.54 percent as of this month, and affordability is at just 18 percent statewide — meaning only 18 out of every 100 California households can afford a median-priced home. That is a stunning number and it explains why transaction volume remains so subdued even as prices hold firm. The Los Angeles market specifically is defined right now by stability, selectivity, and strategy. There is still a critical shortage of new construction, which continues to fuel buyer demand in well-located neighborhoods. Homes priced correctly are selling, many with multiple offers. But the picture varies dramatically by submarket. Brentwood and Beverly Hills are seeing modest appreciation in the 1 to 3 percent range. Downtown LA condos continue to struggle as remote work reshaped demand patterns. The Eastside and Koreatown are seeing some price softness as affordability pushes buyers further out. The San Fernando Valley has more listings, longer days on market, and cautious investors. Here is the big picture takeaway: if the Strait of Hormuz deal holds and oil prices fall, the Fed gets cover to cut rates in September. Even a half-point drop in mortgage rates would unleash an enormous wave of pent-up buyer demand in Los Angeles. Investors with a long-term view might look at the current moment as a quiet entry window before that next wave arrives. The city remains one of the most supply-constrained and desirable markets in the world. That fundamental does not change."
+    text: "Let's talk real estate, because the macro setup right now is genuinely interesting for anyone watching the Los Angeles market. The California Association of Realtors is forecasting a statewide median home price of 905 thousand dollars in 2026, a 3.6 percent increase from last year. The 30-year fixed mortgage rate in California sits at 6.54 percent as of this month, and affordability is at just 18 percent statewide — meaning only 18 out of every 100 California households can afford a median-priced home. That is a stunning number and it explains why transaction volume remains so subdued even as prices hold firm. The Los Angeles market specifically is defined right now by stability, selectivity, and strategy. There is still a critical shortage of new construction, which continues to fuel buyer demand in well-located neighborhoods. Homes priced correctly are selling, many with multiple offers. But the picture varies dramatically by submarket. Brentwood and Beverly Hills are seeing modest appreciation in the 1 to 3 percent range. Downtown LA condos continue to struggle as remote work reshaped demand patterns. The Eastside and Koreatown are seeing some price softness as affordability pushes buyers further out. The San Fernando Valley has more listings, longer days on market, and cautious investors. Here is the big picture takeaway: if the Strait of Hormuz deal holds and oil prices fall, the Fed gets cover to cut rates in September. Even a half-point drop in mortgage rates would unleash an enormous wave of pent-up buyer demand in Los Angeles. Investors with a long-term view might look at the current moment as a quiet entry window before that next wave arrives."
   },
   {
     key: "startups", label: "Startups", icon: "🚀", color: "#10b981",
-    text: "Now let's get into the startup world, because the past week saw some enormous capital moves that tell you a lot about where smart money is flowing. The theme running through all of it is what investors are calling the agentic infrastructure super-cycle — the idea that the AI buildout has moved past foundation models and is now focused on the physical and institutional plumbing needed to make AI work at industrial scale. Global venture investment surged to 300 billion dollars in the first quarter of 2026 alone, representing nearly 70 percent of all capital deployed in all of 2025. That is a staggering acceleration. Exa, an AI-powered search infrastructure company, raised 250 million dollars in a Series C led by Andreessen Horowitz on May 22nd. Modal, a cloud computing platform purpose-built for AI workloads, raised 355 million dollars in a Series C led by General Catalyst on May 21st. Mercury, the financial operating system built for tech startups, raised 200 million dollars in a Series D at a 5.2 billion dollar valuation led by TCV. Mercury is essentially becoming the bank of the startup economy, processing billions in transactions for a wide range of tech companies and professional services firms. A 5.2 billion dollar valuation reflects just how central that position is. And Parallel Web Systems, founded by former Twitter CEO Parag Agrawal, raised 100 million dollars led by Sequoia, bringing total funding to 230 million dollars for its AI agent search platform. Agrawal has been quiet since leaving Twitter and this capital raise signals he is building something serious. The pattern here is clear: the companies building infrastructure underneath AI — compute, financial rails, search, security — are where institutional capital is concentrating right now. If you are thinking about where the next generation of consequential companies will come from, follow the infrastructure dollars."
+    text: "Now let's get into the startup world, because the past week saw some enormous capital moves that tell you a lot about where smart money is flowing. The theme running through all of it is what investors are calling the agentic infrastructure super-cycle — the idea that the AI buildout has moved past foundation models and is now focused on the physical and institutional plumbing needed to make AI work at industrial scale. Global venture investment surged to 300 billion dollars in the first quarter of 2026 alone, representing nearly 70 percent of all capital deployed in all of 2025. That is a staggering acceleration. Exa, an AI-powered search infrastructure company, raised 250 million dollars in a Series C led by Andreessen Horowitz. Modal, a cloud computing platform purpose-built for AI workloads, raised 355 million dollars in a Series C led by General Catalyst. Mercury, the financial operating system built for tech startups, raised 200 million dollars in a Series D at a 5.2 billion dollar valuation. Mercury is essentially becoming the bank of the startup economy, processing billions in transactions for a wide range of tech companies. And Parallel Web Systems, founded by former Twitter CEO Parag Agrawal, raised 100 million dollars led by Sequoia for its AI agent search platform. The pattern here is clear: the companies building infrastructure underneath AI — compute, financial rails, search, security — are where institutional capital is concentrating right now."
   },
   {
     key: "markets", label: "Markets", icon: "📊", color: "#8b5cf6",
-    text: "Markets are closed today for Memorial Day — no trading on the NYSE or Nasdaq, and the bond market is also dark. The S&P 500 closed Friday at 7,473, locking in its eighth consecutive weekly gain, the longest winning streak since late 2023. The Dow sits at its all-time record close of 50,579. The Nasdaq finished at 26,343. The setup heading into Tuesday's open is genuinely significant. S&P 500 futures jumped to a record high after the U.S. announced a deal to reopen the Strait of Hormuz — that is the single biggest catalyst the market has been waiting for all year. If confirmed and sustained, it would remove a major inflationary pressure and could open the door for the Fed to cut rates as early as September. But Goldman Sachs has warned of a growing risk that rising yields and inflation could trigger a correction, and consumer sentiment just fell to a new low in the University of Michigan's May survey, with respondents citing high gas prices and inflation anxiety. Gas prices heading into this holiday weekend were near four-year highs. The disconnect between a rallying stock market and a deeply pessimistic consumer is one of the defining features of this moment. The week ahead is packed: Tuesday brings May consumer confidence data and earnings from AutoZone and Zscaler. Wednesday brings April new home sales alongside results from Salesforce, Marvell Technology, Synopsys, and Snowflake. Dell reports May 28th and HP reports May 27th — both critical reads on the AI infrastructure spending cycle that has been driving this market. Watch oil prices tonight when futures open — they will set the tone for Tuesday's open."
+    text: "Markets are closed today for Memorial Day — no trading on the NYSE or Nasdaq, and the bond market is also dark. The S&P 500 closed Friday at 7,473, locking in its eighth consecutive weekly gain, the longest winning streak since late 2023. The Dow sits at its all-time record close of 50,579. The Nasdaq finished at 26,343. The setup heading into Tuesday's open is genuinely significant. S&P 500 futures jumped to a record high after the U.S. announced a deal to reopen the Strait of Hormuz — that is the single biggest catalyst the market has been waiting for all year. If confirmed and sustained, it would remove a major inflationary pressure and could open the door for the Fed to cut rates as early as September. But Goldman Sachs has warned of a growing risk that rising yields and inflation could trigger a correction, and consumer sentiment just fell to a new low in the University of Michigan's May survey. The week ahead is packed: Tuesday brings May consumer confidence data and earnings from AutoZone and Zscaler. Wednesday brings April new home sales alongside results from Salesforce, Marvell Technology, and Snowflake. Dell reports May 28th and HP reports May 27th — both critical reads on the AI infrastructure spending cycle. Watch oil prices tonight when futures open — they will set the tone for Tuesday's open."
   },
   {
     key: "sports", label: "Sports", icon: "🏀", color: "#f59e0b",
-    text: "Let's close with sports, and the NBA Conference Finals are delivering must-watch basketball. The New York Knicks are absolutely rolling through the Cleveland Cavaliers in the Eastern Conference Finals. The Knicks won Game 1, 115 to 104 in overtime. They won Game 2, 109 to 93. They won Game 3, 121 to 108. Game 4 is tonight in Cleveland at 8 p.m. Eastern on ESPN, and the Cavaliers are facing elimination at home on Memorial Day night. Cleveland has not won a single game in the series and the Knicks are playing with enormous confidence and remarkable cohesion. If New York wins tonight they advance to the NBA Finals, which tip off June 3rd. In the Western Conference, the Oklahoma City Thunder and the San Antonio Spurs are tied at two games apiece, with Game 5 tomorrow night on Peacock. OKC entered as the top seed and defending champions but San Antonio has shown they genuinely belong. The NBA Finals begin June 3rd and right now the Knicks look like the team to beat. It is a great week to be a basketball fan. Enjoy the holiday, stay safe out there, and we will be back tomorrow morning with fresh news, fresh markets, and fresh coffee. This has been your Morning Briefing for Monday, May 25th, 2026. Have a great Memorial Day."
+    text: "Let's close with sports, and the NBA Conference Finals are delivering must-watch basketball. The New York Knicks are absolutely rolling through the Cleveland Cavaliers in the Eastern Conference Finals. The Knicks won Game 1, 115 to 104 in overtime. They won Game 2, 109 to 93. They won Game 3, 121 to 108. Game 4 is tonight in Cleveland at 8 p.m. Eastern on ESPN, and the Cavaliers are facing elimination at home on Memorial Day night. Cleveland has not won a single game in the series and the Knicks are playing with enormous confidence and remarkable cohesion. In the Western Conference, the Oklahoma City Thunder and the San Antonio Spurs are tied at two games apiece, with Game 5 tomorrow night. The NBA Finals begin June 3rd and right now the Knicks look like the team to beat. It is a great week to be a basketball fan. Enjoy the holiday, stay safe out there, and we will be back tomorrow morning with fresh news, fresh markets, and fresh coffee. This has been your Morning Briefing for Monday, May 25th, 2026. Have a great Memorial Day."
   }
 ];
 
@@ -153,18 +152,22 @@ function setSegState(idx, state) {
 
 async function fetchSegmentAudio(idx) {
   setSegState(idx, "loading");
-  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`, {
+  const res = await fetch("https://api.openai.com/v1/audio/speech", {
     method: "POST",
-    headers: { "xi-api-key": API_KEY, "Content-Type": "application/json" },
+    headers: {
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
-      text: SEGMENTS[idx].text,
-      model_id: MODEL,
-      voice_settings: { stability: 0.52, similarity_boost: 0.90, style: 0.12, use_speaker_boost: true }
+      model: "tts-1",
+      input: SEGMENTS[idx].text,
+      voice: VOICE,
+      speed: 0.95
     })
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`ElevenLabs error ${res.status}: ${err.slice(0,200)}`);
+    throw new Error(`OpenAI TTS error ${res.status}: ${err.slice(0,200)}`);
   }
   const blob = await res.blob();
   const url  = URL.createObjectURL(blob);
@@ -182,7 +185,7 @@ async function startBriefing() {
   document.getElementById("playBtn").disabled = true;
   document.getElementById("playHint").textContent = "Generating audio — please wait...";
   SEGMENTS.forEach((_, i) => setSegState(i, "pending"));
-  showStatus("Generating all segments — this takes about 30 seconds...", false);
+  showStatus("Generating all segments with Alloy voice — about 20 seconds...", false);
   try {
     await Promise.all(SEGMENTS.map((_, i) => fetchSegmentAudio(i)));
     hideStatus();
@@ -284,7 +287,7 @@ function showStatus(msg, isError) {
   el.style.display = "block";
 }
 function hideStatus() { document.getElementById("statusBar").style.display = "none"; }
-function openSpotify() { window.location.href = "spotify:"; }
+function openSpotify() { window.location.href = "https://open.spotify.com"; }
 </script>
 </body>
 </html>
