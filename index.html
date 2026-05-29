@@ -14,6 +14,11 @@
   .wrap { position: relative; max-width: 640px; margin: 0 auto; padding: 48px 20px 80px; }
   .badge { display: inline-block; background: linear-gradient(135deg,#f97316,#fb923c); border-radius: 4px; padding: 4px 12px; font-size: 11px; font-family: monospace; letter-spacing: 3px; color: #fff; font-weight: 700; }
   h1 { font-size: clamp(24px,6vw,40px); font-weight: 400; background: linear-gradient(135deg,#f5f0e8 30%,#a89880); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .api-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .api-card label { display: block; font-family: monospace; font-size: 11px; color: #f97316; letter-spacing: 2px; margin-bottom: 10px; }
+  .api-card input { width: 100%; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 10px 14px; color: #c4b8a8; font-size: 13px; font-family: monospace; outline: none; }
+  .api-card input:focus { border-color: rgba(249,115,22,.4); }
+  .save-btn { margin-top: 10px; width: 100%; background: linear-gradient(135deg,#f97316,#ea580c); border: none; border-radius: 8px; padding: 12px; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
   .seg-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
   .seg-btn { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px; text-align: left; width: 100%; transition: all .25s; }
   .seg-btn.active { background: rgba(255,255,255,.07); }
@@ -38,11 +43,11 @@
   .btn-replay { background: rgba(249,115,22,.1); color: #f97316; border: 1px solid rgba(249,115,22,.2); border-radius: 10px; padding: 12px 28px; font-size: 15px; cursor: pointer; }
   .status-bar { background: rgba(249,115,22,.07); border: 1px solid rgba(249,115,22,.15); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-family: monospace; font-size: 13px; color: #fb923c; text-align: center; }
   .status-bar.error { background: rgba(239,68,68,.07); border-color: rgba(239,68,68,.2); color: #ef4444; }
+  .reset-key { background: none; border: none; color: #3a342a; font-size: 11px; font-family: monospace; cursor: pointer; text-decoration: underline; display: block; text-align: center; margin-top: 12px; }
   .center { text-align: center; }
   .mono { font-family: monospace; }
   .muted { color: #6b6355; }
   @keyframes wave { from { transform: scaleY(.4); } to { transform: scaleY(1.3); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -53,29 +58,43 @@
     <h1 style="margin-bottom:6px">Your Daily Intelligence Podcast</h1>
     <p class="mono muted" id="dateDisplay" style="font-size:13px"></p>
   </div>
+
+  <!-- API key setup — hidden once saved -->
+  <div class="api-card" id="apiCard">
+    <label>OPENAI API KEY</label>
+    <input type="password" id="apiKeyInput" placeholder="Paste your OpenAI API key..." autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="save-btn" onclick="saveKey()">Save & Start</button>
+    <p class="mono muted" style="font-size:11px;margin-top:8px;text-align:center">Saved to your device only — never in the code</p>
+  </div>
+
   <div class="status-bar" id="statusBar" style="display:none"></div>
   <div class="seg-list" id="segList"></div>
+
   <div class="progress-wrap" id="progressWrap" style="display:none">
     <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-times"><span id="timeElapsed">0:00</span><span>15:00</span></div>
   </div>
-  <div id="readyControls" class="center" style="margin-bottom:20px">
+
+  <div id="readyControls" class="center" style="display:none;margin-bottom:20px">
     <button class="btn-play" id="playBtn" onclick="startBriefing()">▶</button>
     <p class="mono muted" id="playHint" style="font-size:13px;margin-top:12px">Tap to begin · ~15 minutes</p>
+    <button class="reset-key" onclick="resetKey()">Change API key</button>
   </div>
+
   <div class="controls" id="playingControls" style="display:none">
     <button class="btn-pause" id="pauseBtn" onclick="togglePause()">⏸</button>
     <button class="btn-stop" onclick="stopBriefing()">⏹</button>
   </div>
+
   <div id="doneControls" class="center" style="display:none">
     <p class="mono" style="color:#10b981;margin-bottom:18px;font-size:14px">✓ Briefing Complete</p>
     <button class="btn-spotify" onclick="openSpotify()">🎵 Open Spotify</button><br>
     <button class="btn-replay" onclick="resetAndStart()">↺ Play Again</button>
   </div>
 </div>
+
 <script>
 const BRIEFING_DATE = "Monday, May 25, 2026";
-const OPENAI_API_KEY = "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";
 const VOICE = "alloy";
 
 document.getElementById("dateDisplay").textContent = BRIEFING_DATE;
@@ -83,26 +102,27 @@ document.getElementById("dateDisplay").textContent = BRIEFING_DATE;
 const SEGMENTS = [
   {
     key: "headlines", label: "Headlines & LA", icon: "📰", color: "#f97316",
-    text: "Good morning and happy Memorial Day. Today is Monday, May 25th, 2026, and America is pausing to honor its fallen service members on the nation's 250th anniversary year. President Trump spoke this morning at the 158th National Memorial Day Observance at Arlington National Cemetery, presiding over a ceremony that carried extra weight given both the anniversary milestone and the ongoing U.S.-Iran conflict that has put American military readiness back at the forefront of the national conversation. On the political front, the White House is facing renewed scrutiny over President Trump's health. The administration put out a statement boasting of his excellent health, but questions are circulating given that he is the oldest inaugurated president in U.S. history and the statement came unprompted. Meanwhile a man was shot and killed near a White House security checkpoint on Saturday after opening fire, marking the third incident of gunfire in the vicinity of the president in the past month alone. The Secret Service is investigating, but the pattern is drawing serious attention from security analysts and lawmakers on both sides of the aisle. Closer to home, the city of Los Angeles is about one week out from its June 2nd municipal elections, and the race is heating up in ways that will directly affect everyday Angelenos. Eight of fifteen City Council seats are on the ballot, along with three school board seats. Mayor Karen Bass is running for reelection, as is City Attorney Hydee Feldstein Soto. One of the more colorful subplots is Spencer Pratt running for City Council, holding block parties in South LA complete with taco trucks, influencer livestreams, and campaign merch. Whether he is a legitimate candidate or an elaborate content play remains an open question, but he is drawing crowds and attention in a race that could reshape the balance of power on the Council ahead of the 2028 Olympics."
+    text: "Good morning and happy Memorial Day. Today is Monday, May 25th, 2026, and America is pausing to honor its fallen service members on the nation's 250th anniversary year. President Trump spoke this morning at the 158th National Memorial Day Observance at Arlington National Cemetery, presiding over a ceremony that carried extra weight given both the anniversary milestone and the ongoing U.S.-Iran conflict that has put American military readiness back at the forefront of the national conversation. On the political front, the White House is facing renewed scrutiny over President Trump's health. The administration put out a statement boasting of his excellent health, but questions are circulating given that he is the oldest inaugurated president in U.S. history. Meanwhile a man was shot and killed near a White House security checkpoint on Saturday after opening fire, marking the third incident of gunfire in the vicinity of the president in the past month alone. Closer to home, the city of Los Angeles is about one week out from its June 2nd municipal elections. Eight of fifteen City Council seats are on the ballot, along with three school board seats. Mayor Karen Bass is running for reelection, as is City Attorney Hydee Feldstein Soto. Spencer Pratt is running for City Council, holding block parties in South LA complete with taco trucks, influencer livestreams, and campaign merch — drawing crowds and attention in a race that could reshape the balance of power on the Council ahead of the 2028 Olympics."
   },
   {
     key: "realestate", label: "Real Estate", icon: "🏙️", color: "#3b82f6",
-    text: "Let's talk real estate, because the macro setup right now is genuinely interesting for anyone watching the Los Angeles market. The California Association of Realtors is forecasting a statewide median home price of 905 thousand dollars in 2026, a 3.6 percent increase from last year. The 30-year fixed mortgage rate in California sits at 6.54 percent as of this month, and affordability is at just 18 percent statewide — meaning only 18 out of every 100 California households can afford a median-priced home. That is a stunning number and it explains why transaction volume remains so subdued even as prices hold firm. The Los Angeles market specifically is defined right now by stability, selectivity, and strategy. There is still a critical shortage of new construction, which continues to fuel buyer demand in well-located neighborhoods. Homes priced correctly are selling, many with multiple offers. But the picture varies dramatically by submarket. Brentwood and Beverly Hills are seeing modest appreciation in the 1 to 3 percent range. Downtown LA condos continue to struggle as remote work reshaped demand patterns. The Eastside and Koreatown are seeing some price softness as affordability pushes buyers further out. The San Fernando Valley has more listings, longer days on market, and cautious investors. Here is the big picture takeaway: if the Strait of Hormuz deal holds and oil prices fall, the Fed gets cover to cut rates in September. Even a half-point drop in mortgage rates would unleash an enormous wave of pent-up buyer demand in Los Angeles. Investors with a long-term view might look at the current moment as a quiet entry window before that next wave arrives."
+    text: "Let's talk real estate, because the macro setup right now is genuinely interesting for anyone watching the Los Angeles market. The California Association of Realtors is forecasting a statewide median home price of 905 thousand dollars in 2026, a 3.6 percent increase from last year. The 30-year fixed mortgage rate in California sits at 6.54 percent as of this month, and affordability is at just 18 percent statewide — meaning only 18 out of every 100 California households can afford a median-priced home. That is a stunning number and it explains why transaction volume remains so subdued even as prices hold firm. The Los Angeles market is defined right now by stability, selectivity, and strategy. Brentwood and Beverly Hills are seeing modest appreciation in the 1 to 3 percent range. Downtown LA condos continue to struggle as remote work reshaped demand patterns. The Eastside and Koreatown are seeing some price softness as affordability pushes buyers further out. Here is the big picture takeaway: if the Strait of Hormuz deal holds and oil prices fall, the Fed gets cover to cut rates in September. Even a half-point drop in mortgage rates would unleash an enormous wave of pent-up buyer demand in Los Angeles. Investors with a long-term view might look at the current moment as a quiet entry window before that next wave arrives."
   },
   {
     key: "startups", label: "Startups", icon: "🚀", color: "#10b981",
-    text: "Now let's get into the startup world, because the past week saw some enormous capital moves that tell you a lot about where smart money is flowing. The theme running through all of it is what investors are calling the agentic infrastructure super-cycle — the idea that the AI buildout has moved past foundation models and is now focused on the physical and institutional plumbing needed to make AI work at industrial scale. Global venture investment surged to 300 billion dollars in the first quarter of 2026 alone, representing nearly 70 percent of all capital deployed in all of 2025. That is a staggering acceleration. Exa, an AI-powered search infrastructure company, raised 250 million dollars in a Series C led by Andreessen Horowitz. Modal, a cloud computing platform purpose-built for AI workloads, raised 355 million dollars in a Series C led by General Catalyst. Mercury, the financial operating system built for tech startups, raised 200 million dollars in a Series D at a 5.2 billion dollar valuation. Mercury is essentially becoming the bank of the startup economy, processing billions in transactions for a wide range of tech companies. And Parallel Web Systems, founded by former Twitter CEO Parag Agrawal, raised 100 million dollars led by Sequoia for its AI agent search platform. The pattern here is clear: the companies building infrastructure underneath AI — compute, financial rails, search, security — are where institutional capital is concentrating right now."
+    text: "Now let's get into the startup world, because the past week saw some enormous capital moves. The theme running through all of it is what investors are calling the agentic infrastructure super-cycle — the AI buildout has moved past foundation models and is now focused on the plumbing needed to make AI work at industrial scale. Global venture investment surged to 300 billion dollars in the first quarter of 2026 alone, representing nearly 70 percent of all capital deployed in all of 2025. Exa, an AI-powered search infrastructure company, raised 250 million dollars in a Series C led by Andreessen Horowitz. Modal, a cloud computing platform for AI workloads, raised 355 million dollars in a Series C led by General Catalyst. Mercury, the financial operating system built for startups, raised 200 million dollars in a Series D at a 5.2 billion dollar valuation — essentially becoming the bank of the startup economy. And Parallel Web Systems, founded by former Twitter CEO Parag Agrawal, raised 100 million dollars led by Sequoia for its AI agent search platform. The pattern is clear: the companies building infrastructure underneath AI are where institutional capital is concentrating right now."
   },
   {
     key: "markets", label: "Markets", icon: "📊", color: "#8b5cf6",
-    text: "Markets are closed today for Memorial Day — no trading on the NYSE or Nasdaq, and the bond market is also dark. The S&P 500 closed Friday at 7,473, locking in its eighth consecutive weekly gain, the longest winning streak since late 2023. The Dow sits at its all-time record close of 50,579. The Nasdaq finished at 26,343. The setup heading into Tuesday's open is genuinely significant. S&P 500 futures jumped to a record high after the U.S. announced a deal to reopen the Strait of Hormuz — that is the single biggest catalyst the market has been waiting for all year. If confirmed and sustained, it would remove a major inflationary pressure and could open the door for the Fed to cut rates as early as September. But Goldman Sachs has warned of a growing risk that rising yields and inflation could trigger a correction, and consumer sentiment just fell to a new low in the University of Michigan's May survey. The week ahead is packed: Tuesday brings May consumer confidence data and earnings from AutoZone and Zscaler. Wednesday brings April new home sales alongside results from Salesforce, Marvell Technology, and Snowflake. Dell reports May 28th and HP reports May 27th — both critical reads on the AI infrastructure spending cycle. Watch oil prices tonight when futures open — they will set the tone for Tuesday's open."
+    text: "Markets are closed today for Memorial Day. The S&P 500 closed Friday at 7,473, locking in its eighth consecutive weekly gain — the longest winning streak since late 2023. The Dow sits at its all-time record close of 50,579. The Nasdaq finished at 26,343. The setup heading into Tuesday's open is significant. S&P 500 futures jumped to a record high after the U.S. announced a deal to reopen the Strait of Hormuz — the single biggest catalyst the market has been waiting for all year. If sustained, it removes a major inflationary pressure and could open the door for the Fed to cut rates as early as September. Goldman Sachs has warned of a growing risk that rising yields could trigger a correction, and consumer sentiment just fell to a new low in the University of Michigan's May survey. The week ahead is packed: Tuesday brings consumer confidence data and earnings from AutoZone and Zscaler. Wednesday brings new home sales alongside results from Salesforce, Marvell, and Snowflake. Dell reports May 28th and HP reports May 27th. Watch oil prices tonight when futures open — they will set the tone for Tuesday's open."
   },
   {
     key: "sports", label: "Sports", icon: "🏀", color: "#f59e0b",
-    text: "Let's close with sports, and the NBA Conference Finals are delivering must-watch basketball. The New York Knicks are absolutely rolling through the Cleveland Cavaliers in the Eastern Conference Finals. The Knicks won Game 1, 115 to 104 in overtime. They won Game 2, 109 to 93. They won Game 3, 121 to 108. Game 4 is tonight in Cleveland at 8 p.m. Eastern on ESPN, and the Cavaliers are facing elimination at home on Memorial Day night. Cleveland has not won a single game in the series and the Knicks are playing with enormous confidence and remarkable cohesion. In the Western Conference, the Oklahoma City Thunder and the San Antonio Spurs are tied at two games apiece, with Game 5 tomorrow night. The NBA Finals begin June 3rd and right now the Knicks look like the team to beat. It is a great week to be a basketball fan. Enjoy the holiday, stay safe out there, and we will be back tomorrow morning with fresh news, fresh markets, and fresh coffee. This has been your Morning Briefing for Monday, May 25th, 2026. Have a great Memorial Day."
+    text: "Let's close with sports. The NBA Conference Finals are delivering must-watch basketball. The New York Knicks are rolling through the Cleveland Cavaliers in the Eastern Conference Finals. The Knicks won Game 1, 115 to 104 in overtime. They won Game 2, 109 to 93. They won Game 3, 121 to 108. Game 4 is tonight in Cleveland at 8 p.m. Eastern on ESPN, and the Cavaliers are facing elimination at home on Memorial Day night. In the Western Conference, the Oklahoma City Thunder and the San Antonio Spurs are tied at two games apiece, with Game 5 tomorrow night. The NBA Finals begin June 3rd and right now the Knicks look like the team to beat. Enjoy the holiday, stay safe out there, and we will be back tomorrow morning. This has been your Morning Briefing for Monday, May 25th, 2026. Have a great Memorial Day."
   }
 ];
 
+let apiKey = localStorage.getItem("openai_api_key") || "";
 let audioBlobs = new Array(SEGMENTS.length).fill(null);
 let audioEl = null;
 let currentIdx = 0;
@@ -113,7 +133,30 @@ let startTime = null;
 let elapsedPaused = 0;
 const TARGET_S = 15 * 60;
 
-window.onload = () => { renderSegments(); };
+window.onload = () => {
+  renderSegments();
+  if (apiKey) {
+    document.getElementById("apiCard").style.display = "none";
+    document.getElementById("readyControls").style.display = "block";
+  }
+};
+
+function saveKey() {
+  const val = document.getElementById("apiKeyInput").value.trim();
+  if (!val) return;
+  apiKey = val;
+  localStorage.setItem("openai_api_key", val);
+  document.getElementById("apiCard").style.display = "none";
+  document.getElementById("readyControls").style.display = "block";
+}
+
+function resetKey() {
+  localStorage.removeItem("openai_api_key");
+  apiKey = "";
+  document.getElementById("readyControls").style.display = "none";
+  document.getElementById("apiCard").style.display = "block";
+  document.getElementById("apiKeyInput").value = "";
+}
 
 function renderSegments() {
   const list = document.getElementById("segList");
@@ -154,34 +197,22 @@ async function fetchSegmentAudio(idx) {
   setSegState(idx, "loading");
   const res = await fetch("https://api.openai.com/v1/audio/speech", {
     method: "POST",
-    headers: {
-      "Authorization": `Bearer ${OPENAI_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "tts-1",
-      input: SEGMENTS[idx].text,
-      voice: VOICE,
-      speed: 0.95
-    })
+    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: "tts-1", input: SEGMENTS[idx].text, voice: VOICE, speed: 0.95 })
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`OpenAI TTS error ${res.status}: ${err.slice(0,200)}`);
+    throw new Error(`OpenAI error ${res.status}: ${err.slice(0,200)}`);
   }
   const blob = await res.blob();
-  const url  = URL.createObjectURL(blob);
-  audioBlobs[idx] = url;
+  audioBlobs[idx] = URL.createObjectURL(blob);
   setSegState(idx, "ready");
-  return url;
 }
 
 async function startBriefing() {
   if (isLoading) return;
   isLoading = true;
-  currentIdx = 0;
-  elapsedPaused = 0;
-  isPaused = false;
+  currentIdx = 0; elapsedPaused = 0; isPaused = false;
   document.getElementById("playBtn").disabled = true;
   document.getElementById("playHint").textContent = "Generating audio — please wait...";
   SEGMENTS.forEach((_, i) => setSegState(i, "pending"));
@@ -219,7 +250,6 @@ function playSegment(idx) {
   if (idx > 0) setSegState(idx - 1, "done");
   setSegState(idx, "active");
   audioEl = new Audio(audioBlobs[idx]);
-  audioEl.preload = "auto";
   audioEl.onended = () => playSegment(idx + 1);
   audioEl.onerror = () => playSegment(idx + 1);
   audioEl.play().catch(() => playSegment(idx + 1));
@@ -228,13 +258,11 @@ function playSegment(idx) {
 function togglePause() {
   if (!audioEl) return;
   if (isPaused) {
-    audioEl.play();
-    isPaused = false;
+    audioEl.play(); isPaused = false;
     document.getElementById("pauseBtn").textContent = "⏸";
     startProgressTimer();
   } else {
-    audioEl.pause();
-    isPaused = true;
+    audioEl.pause(); isPaused = true;
     elapsedPaused += (Date.now() - startTime) / 1000;
     clearInterval(progressInterval);
     document.getElementById("pauseBtn").textContent = "▶";
