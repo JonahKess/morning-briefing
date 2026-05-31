@@ -14,15 +14,11 @@
   .wrap { position: relative; max-width: 640px; margin: 0 auto; padding: 40px 20px 80px; }
   .badge { display: inline-block; background: linear-gradient(135deg,#f97316,#fb923c); border-radius: 4px; padding: 4px 12px; font-size: 11px; font-family: monospace; letter-spacing: 3px; color: #fff; font-weight: 700; }
   h1 { font-size: clamp(22px,5vw,36px); font-weight: 400; background: linear-gradient(135deg,#f5f0e8 30%,#a89880); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-  /* Setup screen */
   .setup-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
   .setup-card label { display: block; font-family: monospace; font-size: 11px; color: #f97316; letter-spacing: 2px; margin-bottom: 8px; }
-  .setup-card input { width: 100%; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 10px 14px; color: #c4b8a8; font-size: 13px; font-family: monospace; outline: none; margin-bottom: 8px; }
+  .setup-card input { width: 100%; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 10px 14px; color: #c4b8a8; font-size: 13px; font-family: monospace; outline: none; margin-bottom: 12px; }
   .setup-card input:focus { border-color: rgba(249,115,22,.4); }
   .save-btn { width: 100%; background: linear-gradient(135deg,#f97316,#ea580c); border: none; border-radius: 8px; padding: 14px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
-
-  /* Segments */
   .seg-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
   .seg-btn { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.06); border-radius: 12px; padding: 14px 16px; text-align: left; width: 100%; transition: all .25s; }
   .seg-btn.active { background: rgba(255,255,255,.07); }
@@ -34,14 +30,10 @@
   .seg-sub.ready { color: #10b981; }
   .wave { display: flex; gap: 3px; margin-top: 5px; align-items: flex-end; }
   .wave-bar { width: 3px; height: 14px; border-radius: 2px; opacity: .8; background: var(--seg-color); animation: wave .8s ease-in-out infinite alternate; }
-
-  /* Progress */
   .progress-wrap { margin-bottom: 24px; }
   .progress-track { height: 5px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
   .progress-fill { height: 100%; background: linear-gradient(90deg,#f97316,#fb923c); border-radius: 3px; transition: width 1s linear; }
   .progress-times { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; font-family: monospace; color: #4a4035; }
-
-  /* Buttons */
   .btn-play { background: linear-gradient(135deg,#f97316,#ea580c); color: #fff; border: none; border-radius: 50%; width: 88px; height: 88px; font-size: 32px; cursor: pointer; box-shadow: 0 0 50px rgba(249,115,22,.5); display: flex; align-items: center; justify-content: center; }
   .btn-play:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
   .btn-pause { background: rgba(249,115,22,.15); color: #f97316; border: 1px solid rgba(249,115,22,.3); border-radius: 50%; width: 64px; height: 64px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -49,21 +41,14 @@
   .btn-spotify { width: 100%; background: linear-gradient(135deg,#1db954,#1aa34a); color: #fff; border: none; border-radius: 14px; padding: 18px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 0 30px rgba(29,185,84,.3); margin-bottom: 12px; }
   .btn-replay { background: rgba(249,115,22,.1); color: #f97316; border: 1px solid rgba(249,115,22,.2); border-radius: 10px; padding: 12px 28px; font-size: 15px; cursor: pointer; }
   .btn-settings { background: none; border: none; color: #3a342a; font-size: 11px; font-family: monospace; cursor: pointer; text-decoration: underline; display: block; text-align: center; margin-top: 12px; }
-
-  /* Status */
-  .status-bar { border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-family: monospace; font-size: 13px; text-align: center; }
-  .status-bar.info { background: rgba(249,115,22,.07); border: 1px solid rgba(249,115,22,.15); color: #fb923c; }
-  .status-bar.error { background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.2); color: #ef4444; }
-
-  /* Loading spinner */
+  .status-info { background: rgba(249,115,22,.07); border: 1px solid rgba(249,115,22,.15); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-family: monospace; font-size: 13px; color: #fb923c; text-align: center; }
+  .status-error { background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.2); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-family: monospace; font-size: 12px; color: #ef4444; text-align: center; word-break: break-word; }
   .spinner-wrap { text-align: center; padding: 20px 0; }
   .spinner { width: 48px; height: 48px; border-radius: 50%; border: 3px solid rgba(249,115,22,.2); border-top-color: #f97316; animation: spin 1s linear infinite; margin: 0 auto 16px; }
-
   .center { text-align: center; }
   .controls { display: flex; gap: 14px; justify-content: center; margin-bottom: 20px; }
   .mono { font-family: monospace; }
   .muted { color: #6b6355; }
-
   @keyframes wave { from { transform: scaleY(.4); } to { transform: scaleY(1.3); } }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -72,136 +57,94 @@
 <div class="bg"></div>
 <div class="wrap">
 
-  <!-- Header -->
   <div class="center" style="margin-bottom:28px">
     <div class="badge" style="margin-bottom:10px">MORNING BRIEFING</div>
     <h1 style="margin-bottom:6px">Your Daily Intelligence Podcast</h1>
     <p class="mono muted" id="dateDisplay" style="font-size:13px"></p>
   </div>
 
-  <!-- SCREEN: Setup (first time only) -->
-  <div id="setupScreen">
+  <div id="setupScreen" style="display:none">
     <div class="setup-card">
       <label>ANTHROPIC API KEY</label>
       <input type="password" id="claudeKey" placeholder="sk-ant-..." autocomplete="off" autocorrect="off" spellcheck="false">
-      <label style="margin-top:12px">OPENAI API KEY</label>
+      <label>OPENAI API KEY</label>
       <input type="password" id="openaiKey" placeholder="sk-proj-..." autocomplete="off" autocorrect="off" spellcheck="false">
-      <button class="save-btn" onclick="saveKeys()">Save Keys & Start</button>
-      <p class="mono muted" style="font-size:11px;margin-top:10px;text-align:center">Keys saved to your device only — never in the code</p>
+      <button class="save-btn" id="saveBtn" onclick="saveKeys()">Save Keys & Start</button>
+      <p class="mono muted" style="font-size:11px;margin-top:10px;text-align:center">Saved to your device only</p>
     </div>
   </div>
 
-  <!-- SCREEN: Main player -->
   <div id="mainScreen" style="display:none">
-    <div class="status-bar info" id="statusBar" style="display:none"></div>
-
-    <!-- Loading spinner (while generating script) -->
-    <div id="loadingScript" class="spinner-wrap" style="display:none">
+    <div id="statusBox"></div>
+    <div id="spinnerBox" style="display:none" class="spinner-wrap">
       <div class="spinner"></div>
-      <p class="mono" style="color:#f97316;font-size:13px" id="loadingMsg">Generating today's briefing...</p>
+      <p class="mono" style="color:#f97316;font-size:13px" id="spinnerMsg">Loading...</p>
     </div>
-
-    <!-- Segments -->
     <div class="seg-list" id="segList"></div>
-
-    <!-- Progress bar -->
     <div class="progress-wrap" id="progressWrap" style="display:none">
       <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
       <div class="progress-times"><span id="timeElapsed">0:00</span><span>10:00</span></div>
     </div>
-
-    <!-- Ready to play -->
     <div id="readyControls" class="center" style="display:none;margin-bottom:20px">
-      <button class="btn-play" id="playBtn" onclick="startAudio()">▶</button>
-      <p class="mono muted" id="playHint" style="font-size:13px;margin-top:12px">Tap to begin · ~10 minutes</p>
-      <button class="btn-settings" onclick="showSettings()">⚙ Change API keys</button>
+      <button class="btn-play" id="playBtn" onclick="startAudio()">&#9654;</button>
+      <p class="mono muted" style="font-size:13px;margin-top:12px">Tap to begin &middot; ~10 minutes</p>
+      <button class="btn-settings" onclick="showSetup()">&#9881; Change API keys</button>
     </div>
-
-    <!-- Playing -->
     <div class="controls" id="playingControls" style="display:none">
-      <button class="btn-pause" id="pauseBtn" onclick="togglePause()">⏸</button>
-      <button class="btn-stop" onclick="stopPlayback()">⏹</button>
+      <button class="btn-pause" id="pauseBtn" onclick="togglePause()">&#9646;&#9646;</button>
+      <button class="btn-stop" onclick="stopPlayback()">&#9646;&#9646;&#9646;</button>
     </div>
-
-    <!-- Done -->
     <div id="doneControls" class="center" style="display:none">
-      <p class="mono" style="color:#10b981;margin-bottom:18px;font-size:14px">✓ Briefing Complete</p>
-      <button class="btn-spotify" onclick="openSpotify()">🎵 Open Spotify</button><br>
-      <button class="btn-replay" onclick="replayBriefing()">↺ Play Again</button>
+      <p class="mono" style="color:#10b981;margin-bottom:18px;font-size:14px">&#10003; Briefing Complete</p>
+      <button class="btn-spotify" onclick="openSpotify()">&#127925; Open Spotify</button><br>
+      <button class="btn-replay" onclick="replayBriefing()">&#8635; Play Again</button>
     </div>
   </div>
 
 </div>
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────
-const VOICE = "nova";
-const SPEED = 1.05;
-const TARGET_S = 10 * 60;
-
-const SEGMENT_DEFS = [
-  { key: "headlines", label: "Headlines & LA",  icon: "📰", color: "#f97316" },
-  { key: "realestate",label: "Real Estate",     icon: "🏙️", color: "#3b82f6" },
-  { key: "startups",  label: "Startups & Tech", icon: "🚀", color: "#10b981" },
-  { key: "markets",   label: "Markets",         icon: "📊", color: "#8b5cf6" },
-  { key: "sports",    label: "Sports",          icon: "🏀", color: "#f59e0b" },
+var VOICE = "nova";
+var SPEED = 1.05;
+var TARGET_S = 600;
+var SEG_DEFS = [
+  { key: "headlines",  label: "Headlines & LA",  icon: "&#128240;", color: "#f97316" },
+  { key: "realestate", label: "Real Estate",      icon: "&#127751;", color: "#3b82f6" },
+  { key: "startups",   label: "Startups & Tech",  icon: "&#128640;", color: "#10b981" },
+  { key: "markets",    label: "Markets",          icon: "&#128202;", color: "#8b5cf6" },
+  { key: "sports",     label: "Sports",           icon: "&#127936;", color: "#f59e0b" }
 ];
 
-const SYSTEM_PROMPT = `You are an energetic, sharp morning podcast host. Generate a punchy 10-minute briefing script for today.
+var claudeKey = "";
+var openaiKey = "";
+var segments = {};
+var audioBlobs = [null, null, null, null, null];
+var audioEl = null;
+var currentIdx = 0;
+var isPaused = false;
+var progressInterval = null;
+var startTime = null;
+var elapsedPaused = 0;
 
-CRITICAL: Your ENTIRE response must be a single valid JSON object. No preamble, no explanation, no markdown fences, no text before or after the JSON. Start your response with { and end with }.
-
-Output ONLY this JSON structure:
-a JSON object with keys: headlines, realestate, startups, markets, sports
-
-Each value is a string of spoken prose — no bullet points, no markdown, no asterisks, no newlines inside strings.
-Write conversationally with energy — contractions, transitions, rhetorical questions.
-Keep each segment to 2-3 paragraphs max (about 150-200 words each) so the total is ~10 minutes spoken.
-
-Briefing preferences:
-- headlines: 1 major LA local story + 1-2 national political stories. No geopolitics unless a truly major event.
-- realestate: LA market trends, notable deals, proptech startups, interest rate impacts.
-- startups: 2-3 startups that just raised funding or are gaining serious traction. Be specific with names and amounts.
-- markets: Today's index levels, biggest movers with specific catalysts, macro snapshot. Be specific with numbers.
-- sports: 1 story — Lakers, Dodgers, Rams, Clippers, or whatever is most relevant today.
-
-End the sports segment with a warm sign-off for the day.
-Today's date: DATE_PLACEHOLDER
-
-CRITICAL: Search the web for TODAY's actual news before writing. Use the current date above. Do not use news from previous days. Search for: today's LA news, today's stock market data, today's startup funding news, today's sports scores.`;
-
-// ── STATE ─────────────────────────────────────────────────────────────────
-let claudeApiKey = localStorage.getItem("claude_api_key") || "";
-let openaiApiKey = localStorage.getItem("openai_api_key") || "";
-let segments = {}; // { headlines: "text...", ... }
-let audioBlobs = new Array(SEGMENT_DEFS.length).fill(null);
-let audioEl = null;
-let currentIdx = 0;
-let isPaused = false;
-let progressInterval = null;
-let startTime = null;
-let elapsedPaused = 0;
-
-// ── INIT ──────────────────────────────────────────────────────────────────
-window.onload = () => {
-  const now = new Date();
-  document.getElementById("dateDisplay").textContent = now.toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric"
-  });
-
-  if (claudeApiKey && openaiApiKey) {
-    document.getElementById("setupScreen").style.display = "none";
+function init() {
+  var now = new Date();
+  document.getElementById("dateDisplay").textContent = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  claudeKey = localStorage.getItem("claude_api_key") || "";
+  openaiKey = localStorage.getItem("openai_api_key") || "";
+  renderSegments();
+  if (claudeKey && openaiKey) {
     document.getElementById("mainScreen").style.display = "block";
     generateScript();
+  } else {
+    document.getElementById("setupScreen").style.display = "block";
   }
-};
+}
 
-// ── SETUP ─────────────────────────────────────────────────────────────────
 function saveKeys() {
-  const ck = document.getElementById("claudeKey").value.trim();
-  const ok = document.getElementById("openaiKey").value.trim();
+  var ck = document.getElementById("claudeKey").value.trim();
+  var ok = document.getElementById("openaiKey").value.trim();
   if (!ck || !ok) { alert("Please enter both API keys."); return; }
-  claudeApiKey = ck;
-  openaiApiKey = ok;
+  claudeKey = ck;
+  openaiKey = ok;
   localStorage.setItem("claude_api_key", ck);
   localStorage.setItem("openai_api_key", ok);
   document.getElementById("setupScreen").style.display = "none";
@@ -209,193 +152,254 @@ function saveKeys() {
   generateScript();
 }
 
-function showSettings() {
+function showSetup() {
   document.getElementById("mainScreen").style.display = "none";
   document.getElementById("setupScreen").style.display = "block";
-  document.getElementById("claudeKey").value = claudeApiKey;
-  document.getElementById("openaiKey").value = openaiApiKey;
 }
 
-// ── GENERATE SCRIPT VIA CLAUDE ────────────────────────────────────────────
-async function generateScript() {
-  showLoading("Generating today's briefing with Claude...");
-  renderSegments("pending");
+function renderSegments() {
+  var html = "";
+  for (var i = 0; i < SEG_DEFS.length; i++) {
+    var s = SEG_DEFS[i];
+    html += '<div class="seg-btn" id="seg_' + i + '" style="--seg-color:' + s.color + '">' +
+      '<span class="seg-icon">' + s.icon + '</span>' +
+      '<div style="flex:1">' +
+        '<div class="seg-label" id="seglabel_' + i + '">' + s.label + '</div>' +
+        '<div id="segwave_' + i + '" style="display:none"><div class="wave">' +
+          '<div class="wave-bar" style="background:' + s.color + ';animation-delay:0s"></div>' +
+          '<div class="wave-bar" style="background:' + s.color + ';animation-delay:.1s"></div>' +
+          '<div class="wave-bar" style="background:' + s.color + ';animation-delay:.2s"></div>' +
+          '<div class="wave-bar" style="background:' + s.color + ';animation-delay:.3s"></div>' +
+          '<div class="wave-bar" style="background:' + s.color + ';animation-delay:.4s"></div>' +
+        '</div></div>' +
+        '<div class="seg-sub" id="segsub_' + i + '">pending...</div>' +
+      '</div>' +
+      '<span id="segcheck_' + i + '" style="display:none;color:#10b981;font-size:18px">&#10003;</span>' +
+      '<span id="segplay_' + i + '" style="display:none;color:' + s.color + ';font-size:11px;font-family:monospace">PLAYING</span>' +
+    '</div>';
+  }
+  document.getElementById("segList").innerHTML = html;
+}
 
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric"
-  });
-  const prompt = SYSTEM_PROMPT.replace("DATE_PLACEHOLDER", today);
+function setSegSub(idx, text, isReady) {
+  var el = document.getElementById("segsub_" + idx);
+  if (el) { el.textContent = text; el.className = "seg-sub" + (isReady ? " ready" : ""); }
+}
+
+function setSegState(idx, state) {
+  var btn   = document.getElementById("seg_" + idx);
+  var label = document.getElementById("seglabel_" + idx);
+  var wave  = document.getElementById("segwave_" + idx);
+  var check = document.getElementById("segcheck_" + idx);
+  var play  = document.getElementById("segplay_" + idx);
+  var sub   = document.getElementById("segsub_" + idx);
+  if (!btn) return;
+  btn.classList.toggle("active", state === "active");
+  label.className = "seg-label" + (state === "active" ? " active" : state === "done" ? " done" : "");
+  wave.style.display  = state === "active" ? "block" : "none";
+  check.style.display = state === "done"   ? "inline" : "none";
+  play.style.display  = state === "active" ? "inline" : "none";
+  if (sub) sub.style.display = (state === "active" || state === "done") ? "none" : "block";
+}
+
+function showSpinner(msg) {
+  document.getElementById("spinnerBox").style.display = "block";
+  document.getElementById("spinnerMsg").textContent = msg;
+  document.getElementById("statusBox").innerHTML = "";
+}
+function hideSpinner() { document.getElementById("spinnerBox").style.display = "none"; }
+function showInfo(msg) { document.getElementById("statusBox").innerHTML = '<div class="status-info">' + msg + '</div>'; }
+function showError(msg, withRetry) {
+  var btn = withRetry ? ' <button onclick="generateScript()" style="margin-left:8px;background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:#ef4444;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px">Retry</button>' : '';
+  document.getElementById("statusBox").innerHTML = '<div class="status-error">' + msg + btn + '</div>';
+}
+function clearStatus() { document.getElementById("statusBox").innerHTML = ""; }
+
+async function generateScript() {
+  showSpinner("Searching for today's news...");
+  for (var i = 0; i < SEG_DEFS.length; i++) setSegSub(i, "pending...", false);
+  document.getElementById("readyControls").style.display = "none";
+
+  var today = new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  var userMsg = "Today is " + today + ". Search the web for today's current news, then write a morning briefing. " +
+    "Return ONLY a raw JSON object (no markdown, no explanation, no text before or after). " +
+    "The JSON must have exactly these 5 keys: headlines, realestate, startups, markets, sports. " +
+    "Each value is a spoken prose string, 150-200 words, energetic and conversational. No bullet points. No newlines inside strings. " +
+    "headlines: 1 LA local story + 1-2 national political stories (no geopolitics unless major). " +
+    "realestate: LA market trends, notable deals, proptech startups, rate impacts. " +
+    "startups: 2-3 companies that just raised funding or are gaining traction, with specific names and amounts. " +
+    "markets: today's index levels, biggest movers with catalysts, macro snapshot. " +
+    "sports: 1 story about Lakers, Dodgers, Rams, Clippers, or NBA/MLB. End with a warm sign-off for the day.";
 
   try {
-    // First call — Claude searches the web for today's news
-    const res1 = await fetch("https://api.anthropic.com/v1/messages", {
+    // Step 1: send with web search tool
+    var body1 = {
+      model: "claude-sonnet-4-5",
+      max_tokens: 5000,
+      tools: [{ type: "web_search_20250305", name: "web_search" }],
+      messages: [{ role: "user", content: userMsg }]
+    };
+
+    var r1 = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "content-type": "application/json",
         "anthropic-version": "2023-06-01",
         "anthropic-dangerous-direct-browser-access": "true",
-        "x-api-key": claudeApiKey,
+        "x-api-key": claudeKey
       },
-      body: JSON.stringify({
+      body: JSON.stringify(body1)
+    });
+
+    if (!r1.ok) {
+      var e1 = await r1.text();
+      throw new Error("Claude error " + r1.status + ": " + e1.slice(0, 150));
+    }
+
+    var d1 = await r1.json();
+    var messages = [{ role: "user", content: userMsg }];
+    var finalContent = d1.content;
+
+    // Step 2: if tool_use, feed results back
+    if (d1.stop_reason === "tool_use") {
+      showSpinner("Reading today's news...");
+      messages.push({ role: "assistant", content: d1.content });
+      var toolResults = [];
+      for (var j = 0; j < d1.content.length; j++) {
+        if (d1.content[j].type === "tool_use") {
+          toolResults.push({ type: "tool_result", tool_use_id: d1.content[j].id, content: "Search completed." });
+        }
+      }
+      messages.push({ role: "user", content: toolResults });
+
+      showSpinner("Writing your briefing...");
+      var body2 = {
         model: "claude-sonnet-4-5",
         max_tokens: 5000,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
+        messages: messages
+      };
 
-    if (!res1.ok) {
-      const err = await res1.text();
-      throw new Error(`Claude API error ${res1.status}: ${err.slice(0,200)}`);
-    }
-
-    const data1 = await res1.json();
-
-    // Handle tool use loop — keep going until end_turn
-    let messages = [{ role: "user", content: prompt }];
-    let finalData = data1;
-
-    if (data1.stop_reason === "tool_use") {
-      messages.push({ role: "assistant", content: data1.content });
-      const toolResults = data1.content
-        .filter(b => b.type === "tool_use")
-        .map(b => ({ type: "tool_result", tool_use_id: b.id, content: JSON.stringify(b.input) }));
-      messages.push({ role: "user", content: toolResults });
-
-      const res2 = await fetch("https://api.anthropic.com/v1/messages", {
+      var r2 = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "content-type": "application/json",
           "anthropic-version": "2023-06-01",
           "anthropic-dangerous-direct-browser-access": "true",
-          "x-api-key": claudeApiKey,
+          "x-api-key": claudeKey
         },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-5",
-          max_tokens: 5000,
-          tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages
-        })
+        body: JSON.stringify(body2)
       });
-      if (!res2.ok) {
-        const err = await res2.text();
-        throw new Error(`Claude API error ${res2.status}: ${err.slice(0,200)}`);
+
+      if (!r2.ok) {
+        var e2 = await r2.text();
+        throw new Error("Claude error " + r2.status + ": " + e2.slice(0, 150));
       }
-      finalData = await res2.json();
+
+      var d2 = await r2.json();
+      finalContent = d2.content;
     }
 
-    const raw = finalData.content.filter(b => b.type === "text").map(b => b.text).join("");
-
-    // Robustly extract JSON from Claude's response
-    let parsed;
-    try {
-      // Try to find JSON object in the response
-      const jsonMatch = raw.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error("No JSON found in response");
-      const clean = jsonMatch[0]
-        .replace(/```json|```/g, "")
-        .replace(/[ --]/g, " ") // strip control chars
-        .trim();
-      parsed = JSON.parse(clean);
-    } catch(parseErr) {
-      // Fallback: ask Claude again with stricter instructions
-      throw new Error(`JSON parse failed. Raw response: ${raw.slice(0,150)}`);
+    // Extract text from final response
+    var raw = "";
+    for (var k = 0; k < finalContent.length; k++) {
+      if (finalContent[k].type === "text") raw += finalContent[k].text;
     }
 
-    // Validate all keys present
-    for (const def of SEGMENT_DEFS) {
-      if (!parsed[def.key]) throw new Error(`Missing segment: ${def.key}`);
+    // Find and parse JSON
+    var start = raw.indexOf("{");
+    var end = raw.lastIndexOf("}");
+    if (start === -1 || end === -1) throw new Error("No JSON found in response. Got: " + raw.slice(0, 100));
+    var jsonStr = raw.slice(start, end + 1);
+    var parsed = JSON.parse(jsonStr);
+
+    for (var d = 0; d < SEG_DEFS.length; d++) {
+      if (!parsed[SEG_DEFS[d].key]) throw new Error("Missing segment: " + SEG_DEFS[d].key);
     }
 
     segments = parsed;
-    hideLoading();
-    renderSegments("pending");
-
-    // Now generate all audio
+    hideSpinner();
+    showInfo("Generating audio...");
     await generateAllAudio();
 
-  } catch(e) {
-    hideLoading();
-    showError(`Script generation failed: ${e.message}. Tap retry.`, true);
-    showRetryBtn();
+  } catch(err) {
+    hideSpinner();
+    showError("Error: " + err.message, true);
   }
 }
 
-// ── GENERATE AUDIO VIA OPENAI TTS ─────────────────────────────────────────
 async function generateAllAudio() {
-  showStatus("Generating audio — about 15 seconds...", false);
-  renderSegments("pending");
-
   try {
-    await Promise.all(SEGMENT_DEFS.map((def, i) => fetchAudio(i, def.key)));
-    hideStatus();
+    var promises = [];
+    for (var i = 0; i < SEG_DEFS.length; i++) {
+      promises.push(fetchAudio(i));
+    }
+    await Promise.all(promises);
+    clearStatus();
     document.getElementById("readyControls").style.display = "block";
-    renderSegments("ready");
-  } catch(e) {
-    showError(`Audio generation failed: ${e.message}`, true);
-    showRetryBtn();
+  } catch(err) {
+    showError("Audio error: " + err.message, true);
   }
 }
 
-async function fetchAudio(idx, key) {
+async function fetchAudio(idx) {
   setSegSub(idx, "generating...", false);
-  const res = await fetch("https://api.openai.com/v1/audio/speech", {
+  var res = await fetch("https://api.openai.com/v1/audio/speech", {
     method: "POST",
-    headers: { "Authorization": `Bearer ${openaiApiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "tts-1", input: segments[key], voice: VOICE, speed: SPEED })
+    headers: { "Authorization": "Bearer " + openaiKey, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: "tts-1", input: segments[SEG_DEFS[idx].key], voice: VOICE, speed: SPEED })
   });
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenAI TTS error ${res.status}: ${err.slice(0,150)}`);
+    var err = await res.text();
+    throw new Error("OpenAI error " + res.status + ": " + err.slice(0, 100));
   }
-  const blob = await res.blob();
+  var blob = await res.blob();
   audioBlobs[idx] = URL.createObjectURL(blob);
-  setSegSub(idx, "✓ ready", true);
+  setSegSub(idx, "ready", true);
 }
 
-// ── PLAYBACK ──────────────────────────────────────────────────────────────
 function startAudio() {
   currentIdx = 0; elapsedPaused = 0; isPaused = false;
-  document.getElementById("playBtn").disabled = true;
   document.getElementById("readyControls").style.display = "none";
   document.getElementById("playingControls").style.display = "flex";
   document.getElementById("progressWrap").style.display = "block";
   startTime = Date.now();
-  startProgressTimer();
+  startTimer();
   playSegment(0);
 }
 
 function playSegment(idx) {
-  if (idx >= SEGMENT_DEFS.length) {
+  if (idx >= SEG_DEFS.length) {
     clearInterval(progressInterval);
     document.getElementById("progressFill").style.width = "100%";
     document.getElementById("timeElapsed").textContent = "10:00";
     document.getElementById("playingControls").style.display = "none";
     document.getElementById("progressWrap").style.display = "none";
     document.getElementById("doneControls").style.display = "block";
-    setAllDone();
+    for (var i = 0; i < SEG_DEFS.length; i++) setSegState(i, "done");
     return;
   }
   currentIdx = idx;
   if (idx > 0) setSegState(idx - 1, "done");
   setSegState(idx, "active");
   audioEl = new Audio(audioBlobs[idx]);
-  audioEl.onended = () => playSegment(idx + 1);
-  audioEl.onerror = () => playSegment(idx + 1);
-  audioEl.play().catch(() => playSegment(idx + 1));
+  audioEl.onended = function() { playSegment(idx + 1); };
+  audioEl.onerror = function() { playSegment(idx + 1); };
+  audioEl.play().catch(function() { playSegment(idx + 1); });
 }
 
 function togglePause() {
   if (!audioEl) return;
   if (isPaused) {
     audioEl.play(); isPaused = false;
-    document.getElementById("pauseBtn").textContent = "⏸";
-    startProgressTimer();
+    document.getElementById("pauseBtn").innerHTML = "&#9646;&#9646;";
+    startTimer();
   } else {
     audioEl.pause(); isPaused = true;
     elapsedPaused += (Date.now() - startTime) / 1000;
     clearInterval(progressInterval);
-    document.getElementById("pauseBtn").textContent = "▶";
+    document.getElementById("pauseBtn").innerHTML = "&#9654;";
   }
 }
 
@@ -409,8 +413,7 @@ function stopPlayback() {
   document.getElementById("progressWrap").style.display = "none";
   document.getElementById("doneControls").style.display = "none";
   document.getElementById("readyControls").style.display = "block";
-  document.getElementById("playBtn").disabled = false;
-  renderSegments("ready");
+  for (var i = 0; i < SEG_DEFS.length; i++) setSegSub(i, "ready", true);
 }
 
 function replayBriefing() {
@@ -420,91 +423,25 @@ function replayBriefing() {
   document.getElementById("progressFill").style.width = "0%";
   document.getElementById("timeElapsed").textContent = "0:00";
   currentIdx = 0; elapsedPaused = 0; isPaused = false;
-  startTime = Date.now();
-  startProgressTimer();
-  playSegment(0);
+  startTime = Date.now(); startTimer(); playSegment(0);
 }
 
-function startProgressTimer() {
+function startTimer() {
   clearInterval(progressInterval);
   startTime = Date.now();
-  progressInterval = setInterval(() => {
-    const total = elapsedPaused + (Date.now() - startTime) / 1000;
-    const pct = Math.min(total / TARGET_S * 100, 99);
+  progressInterval = setInterval(function() {
+    var total = elapsedPaused + (Date.now() - startTime) / 1000;
+    var pct = Math.min(total / TARGET_S * 100, 99);
     document.getElementById("progressFill").style.width = pct + "%";
-    const m = Math.floor(total / 60);
-    const s = Math.floor(total % 60);
-    document.getElementById("timeElapsed").textContent = `${m}:${String(s).padStart(2,"0")}`;
+    var m = Math.floor(total / 60);
+    var s = Math.floor(total % 60);
+    document.getElementById("timeElapsed").textContent = m + ":" + (s < 10 ? "0" : "") + s;
   }, 1000);
 }
 
-// ── SEGMENT UI ────────────────────────────────────────────────────────────
-function renderSegments(mode) {
-  const list = document.getElementById("segList");
-  list.innerHTML = SEGMENT_DEFS.map((s, i) => `
-    <div class="seg-btn" id="seg_${i}" style="--seg-color:${s.color}">
-      <span class="seg-icon">${s.icon}</span>
-      <div style="flex:1">
-        <div class="seg-label" id="seglabel_${i}">${s.label}</div>
-        <div id="segwave_${i}" style="display:none">
-          <div class="wave">${[0,1,2,3,4].map(j=>`<div class="wave-bar" style="background:${s.color};animation-delay:${j*.1}s"></div>`).join("")}</div>
-        </div>
-        <div class="seg-sub" id="segsub_${i}">${mode === "ready" ? "✓ ready" : "pending..."}</div>
-      </div>
-      <span id="segcheck_${i}" style="display:none;color:#10b981;font-size:18px">✓</span>
-      <span id="segplaying_${i}" style="display:none;color:${s.color};font-size:11px;font-family:monospace">PLAYING</span>
-    </div>
-  `).join("");
-}
-
-function setSegSub(idx, text, isReady) {
-  const el = document.getElementById(`segsub_${idx}`);
-  if (el) { el.textContent = text; el.className = "seg-sub" + (isReady ? " ready" : ""); }
-}
-
-function setSegState(idx, state) {
-  const btn   = document.getElementById(`seg_${idx}`);
-  const label = document.getElementById(`seglabel_${idx}`);
-  const wave  = document.getElementById(`segwave_${idx}`);
-  const check = document.getElementById(`segcheck_${idx}`);
-  const play  = document.getElementById(`segplaying_${idx}`);
-  const sub   = document.getElementById(`segsub_${idx}`);
-  if (!btn) return;
-  btn.classList.toggle("active", state === "active");
-  label.className = "seg-label" + (state === "active" ? " active" : state === "done" ? " done" : "");
-  wave.style.display  = state === "active" ? "block" : "none";
-  check.style.display = state === "done"   ? "inline" : "none";
-  play.style.display  = state === "active" ? "inline" : "none";
-  if (sub) sub.style.display = (state === "active" || state === "done") ? "none" : "block";
-}
-
-function setAllDone() {
-  SEGMENT_DEFS.forEach((_, i) => setSegState(i, "done"));
-}
-
-// ── HELPERS ───────────────────────────────────────────────────────────────
-function showLoading(msg) {
-  document.getElementById("loadingScript").style.display = "block";
-  document.getElementById("loadingMsg").textContent = msg;
-  document.getElementById("readyControls").style.display = "none";
-}
-function hideLoading() { document.getElementById("loadingScript").style.display = "none"; }
-
-function showStatus(msg, isError) {
-  const el = document.getElementById("statusBar");
-  el.textContent = msg;
-  el.className = "status-bar " + (isError ? "error" : "info");
-  el.style.display = "block";
-}
-function hideStatus() { document.getElementById("statusBar").style.display = "none"; }
-function showError(msg) { showStatus(msg, true); }
-
-function showRetryBtn() {
-  const el = document.getElementById("statusBar");
-  el.innerHTML += ' <button onclick="generateScript()" style="margin-left:8px;background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:#ef4444;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px">Retry</button>';
-}
-
 function openSpotify() { window.location.href = "https://open.spotify.com"; }
+
+window.onload = init;
 </script>
 </body>
 </html>
